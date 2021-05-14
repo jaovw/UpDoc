@@ -1,0 +1,43 @@
+{%extends "default.html"%}
+
+{%block title%} UPLOAD {% endblock %}
+{%block content%}
+<div class="container">
+    <!-- List of uploaded documents -->
+    {% if documents %}
+        <ul class="messages">
+        
+        {% for document in documents %}
+            <li class="task-item"><a  href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No documents.</p>
+    {% endif %}
+    <ul class="messages">
+        {%for msg in messages%}
+        <li class="alert alert-{{msg.level_tag}}" role="alert">
+           
+            {{msg.message}}
+    
+        </li>
+        {%endfor%}
+    </ul>
+
+    <div class="container-fluid">
+        <!-- Upload form. Note enctype attribute! -->
+        <form action="{% url 'list' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>{{ form.non_field_errors }}</p>
+            <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+            <p>
+                {{ form.docfile.errors }}
+                {{ form.docfile }}
+            </p>
+
+            <p><input  type="submit" value="Upload" /></p>
+        </form>
+    </div>
+</div>
+
+{%endblock%}
